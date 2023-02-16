@@ -10,7 +10,7 @@ zuul:
   routes:
     auth:
       url: https://dibros-auth.up.railway.app
-    produto:
+    produtos:
       url: https://dibros-produto.up.railway.app
     meli:
       url: https://dibros-meli.up.railway.app
