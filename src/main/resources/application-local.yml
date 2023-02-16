@@ -5,3 +5,11 @@ eureka:
   client:
     service-url:
       defaultZone: https://dibros-discovery.up.railway.app/eureka/
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
