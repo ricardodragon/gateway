@@ -2,10 +2,6 @@ server:
   port: 7080
 
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
-    register-with-eureka: true
-    fetch-registry: true
     service-url:
-      defaultZone: https://localhost:8081/eureka/
+      defaultZone: https://dibros-discovery.up.railway.app/eureka/
