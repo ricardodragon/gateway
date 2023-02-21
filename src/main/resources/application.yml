@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   application:
     name: gateway
@@ -9,11 +10,11 @@ zuul:
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
   routes:
     auth:
-      url: https://dibros-auth.up.railway.app
+      url: http://dibros.ddns.net:8083
     produto:
-      url: https://dibros-produto.up.railway.app
+      url: http://dibros.ddns.net:8086
     meli:
-      url: https://dibros-meli.up.railway.app
+      url: http://dibros.ddns.net:8085
 
 jwt:
   config:
@@ -29,4 +30,4 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: https://dibros-discovery.up.railway.app/eureka/
+      defaultZone: https://dibros-eureka.up.railway.app/eureka/
