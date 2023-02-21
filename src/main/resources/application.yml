@@ -10,11 +10,11 @@ zuul:
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
   routes:
     auth:
-      url: http://dibros.ddns.net:8083
+      url: http://dibros.ddns.net:5000
     produto:
-      url: http://dibros.ddns.net:8086
+      url: http://dibros.ddns.net:5001
     meli:
-      url: http://dibros.ddns.net:8085
+      url: http://dibros.ddns.net:5002
 
 jwt:
   config:
