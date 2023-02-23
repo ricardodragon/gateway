@@ -1,5 +1,10 @@
 server:
-  port: 8080
+  port: 7080
+  ssl:
+    enabled: true
+    key-store: classpath:dibros.jks
+    key-store-type: JKS
+    key-store-password: dibros
 
 spring:
   application:
@@ -8,13 +13,13 @@ spring:
 zuul:
   sensitive-headers: Coockie
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-  routes:
-    auth:
-      url: http://dibros.ddns.net:5000
-    produto:
-      url: http://dibros.ddns.net:5001
-    meli:
-      url: http://dibros.ddns.net:5002
+#  routes:
+#    auth:
+#      url: http://dibros.ddns.net:5000
+#    produto:
+#      url: http://dibros.ddns.net:5001
+#    meli:
+#      url: http://dibros.ddns.net:5002
 
 jwt:
   config:
@@ -30,4 +35,4 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: https://dibros-eureka.up.railway.app/eureka/
+      defaultZone: http://localhost:7081/eureka/

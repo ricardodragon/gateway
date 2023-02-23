@@ -1,5 +1,34 @@
 server:
   port: 7080
+  ssl:
+    enabled: true
+    key-store: classpath:dibros.jks
+    key-store-type: JKS
+    key-store-password: dibros
+
+spring:
+  application:
+    name: gateway
+
+zuul:
+  sensitive-headers: Coockie
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+#  routes:
+#    auth:
+#      url: http://localhost:7082
+#    produto:
+#      url: http://localhost:7083
+#    meli:
+#      url: http://localhost:7084
+
+jwt:
+  config:
+    login-url: /auth/login
+    type: signed
+
+ribbon:
+  ReadTimeout: 100000
+  ConnectTimeout: 100000
 
 eureka:
   client:
