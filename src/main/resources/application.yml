@@ -1,25 +1,29 @@
 server:
   port: 7080
-  ssl:
-    enabled: true
-    key-store: classpath:dibros.jks
-    key-store-type: JKS
-    key-store-password: dibros
+#  ssl:
+#    enabled: true
+#    key-store: classpath:dibros.p12
+#    key-store-type: PKCS12
+#    key-store-password: dibros
 
 spring:
   application:
     name: gateway
-
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 3MB
 zuul:
+  ssl-hostname-validation-enabled: false
   sensitive-headers: Coockie
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-#  routes:
-#    auth:
-#      url: http://dibros.ddns.net:5000
-#    produto:
-#      url: http://dibros.ddns.net:5001
-#    meli:
-#      url: http://dibros.ddns.net:5002
+  routes:
+    auth:
+      url: http://localhost:5000
+    produto:
+      url: http://localhost:5001
+    meli:
+      url: http://localhost:5002
 
 jwt:
   config:
@@ -31,8 +35,11 @@ ribbon:
   ConnectTimeout: 100000
 
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:7081/eureka/
+

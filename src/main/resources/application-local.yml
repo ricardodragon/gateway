@@ -1,10 +1,9 @@
 server:
   port: 7080
-  ssl:
-    enabled: true
-    key-store: classpath:dibros.jks
-    key-store-type: JKS
-    key-store-password: dibros
+#  ssl:
+#    enabled: true
+#    key-store-type: PKCS12
+#    key-store: classpath:certificado.p12
 
 spring:
   application:
@@ -13,13 +12,13 @@ spring:
 zuul:
   sensitive-headers: Coockie
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-#  routes:
-#    auth:
-#      url: http://localhost:7082
-#    produto:
-#      url: http://localhost:7083
-#    meli:
-#      url: http://localhost:7084
+  routes:
+    auth:
+      url: http://localhost:5000
+    produto:
+      url: http://localhost:5001
+    meli:
+      url: http://localhost:5002
 
 jwt:
   config:
@@ -31,6 +30,8 @@ ribbon:
   ConnectTimeout: 100000
 
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     register-with-eureka: true
     fetch-registry: true
