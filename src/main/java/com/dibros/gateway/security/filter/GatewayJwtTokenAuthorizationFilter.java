@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 
 import static com.dibros.core.token.util.SecurityContextUtil.setSecurityContext;
 
@@ -24,7 +25,6 @@ public class GatewayJwtTokenAuthorizationFilter extends JwtTokenAuthorizationFil
 
 
     @Override
-    @SneakyThrows
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         String header = request.getHeader(jwtConfiguration.getHeader().getName());
@@ -40,7 +40,11 @@ public class GatewayJwtTokenAuthorizationFilter extends JwtTokenAuthorizationFil
 
         tokenConverter.validateTokenSignature(signedToken);
 
-        setSecurityContext(SignedJWT.parse(signedToken));
+        try {
+            setSecurityContext(SignedJWT.parse(signedToken));
+        }catch(ParseException e){
+            throw new IOException(e.getMessage());
+        }
 
         if (jwtConfiguration.getType().equalsIgnoreCase("signed"))
             RequestContext.getCurrentContext().addZuulRequestHeader("Authorization", jwtConfiguration.getHeader().getPrefix() + signedToken);
