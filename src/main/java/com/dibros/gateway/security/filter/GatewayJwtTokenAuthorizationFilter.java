@@ -5,7 +5,6 @@ import com.dibros.core.token.converter.TokenConverter;
 import com.dibros.core.token.filter.JwtTokenAuthorizationFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.nimbusds.jwt.SignedJWT;
-import lombok.SneakyThrows;
 import org.springframework.lang.NonNull;
 
 import javax.servlet.FilterChain;

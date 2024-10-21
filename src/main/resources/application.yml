@@ -34,4 +34,3 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:7081/eureka/
-
