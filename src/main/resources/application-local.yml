@@ -1,29 +1,32 @@
 server:
   port: 7080
-#  ssl:
-#    enabled: true
-#    key-store-type: PKCS12
-#    key-store: classpath:certificado.p12
+  ssl:
+    enabled: false
+    key-store: classpath:dibros.ddns.net.jks
+    key-store-password: '031290'
 
 spring:
   application:
     name: gateway
+  r2dbc:
+    url: r2dbc:mysql://127.0.0.1:3306/dibros?allowPublicKeyRetrieval=true&sslMode=DISABLED&useTimezone=true&serverTimezone=UTC
+    username: root
+    password: root
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 
 zuul:
   sensitive-headers: Coockie
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-  routes:
-    auth:
-      url: http://localhost:5000
-    produto:
-      url: http://localhost:5001
-    meli:
-      url: http://localhost:5002
 
 jwt:
   config:
     login-url: /auth/login
-    type: signed
+    type: "signed"
 
 ribbon:
   ReadTimeout: 100000
@@ -33,7 +36,8 @@ eureka:
   instance:
     prefer-ip-address: true
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    registerWithEureka: true
+    fetchRegistry: true
     service-url:
       defaultZone: http://localhost:7081/eureka/
+
