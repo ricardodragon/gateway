@@ -19,10 +19,6 @@ spring:
           enabled: true
           lower-case-service-id: true
 
-zuul:
-  sensitive-headers: Coockie
-  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-
 jwt:
   config:
     login-url: /auth/login
