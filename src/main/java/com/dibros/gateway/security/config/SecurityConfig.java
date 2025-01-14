@@ -23,7 +23,11 @@ import java.util.Collections;
 public class SecurityConfig extends TokenConfig {
 
     public SecurityConfig(JwtConfiguration jwtConfiguration) {
-        this.getUrls().addAll(Arrays.asList(jwtConfiguration.getLoginUrl(), "/auth/usuarios/email-token"));
+        this.getUrls().addAll(Arrays.asList(
+            jwtConfiguration.getLoginUrl(), "/auth/usuarios/email-token",
+            "/imagem/public/**", "/loja/anuncios/public*", "/loja/anuncios/public/*",
+            "/loja/produtos/public*", "/loja/lojas/public*", "/loja/anuncios/comentarios/public/**"
+        ));
     }
 
     @Bean
@@ -38,6 +42,7 @@ public class SecurityConfig extends TokenConfig {
     CorsWebFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
         config.setAllowCredentials(true);
+        config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowedOriginPatterns(Collections.singletonList("*"));
         config.setExposedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
