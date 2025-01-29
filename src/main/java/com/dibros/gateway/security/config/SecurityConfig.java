@@ -24,7 +24,7 @@ public class SecurityConfig extends TokenConfig {
 
     public SecurityConfig(JwtConfiguration jwtConfiguration) {
         this.getUrls().addAll(Arrays.asList(
-            jwtConfiguration.getLoginUrl(), "/auth/usuarios/email-token",
+            jwtConfiguration.getLoginUrl(), "/auth/usuarios/email-token", "/teste/notificacoes*",
             "/imagem/public/**", "/loja/anuncios/public*", "/loja/anuncios/public/*",
             "/loja/produtos/public*", "/loja/lojas/public*", "/loja/anuncios/comentarios/public/**"
         ));
