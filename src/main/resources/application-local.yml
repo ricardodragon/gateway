@@ -1,9 +1,10 @@
 server:
   port: 7080
   ssl:
-    enabled: false
-    key-store: classpath:dibros.ddns.net.jks
-    key-store-password: '031290'
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:dibros.p12
+    key-store-password: 'dibros'
 
 spring:
   application:
@@ -12,6 +13,10 @@ spring:
     url: r2dbc:mysql://127.0.0.1:3306/dibros?allowPublicKeyRetrieval=true&sslMode=DISABLED&useTimezone=true&serverTimezone=UTC
     username: root
     password: root
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 3MB
   cloud:
     gateway:
       discovery:
@@ -37,4 +42,3 @@ eureka:
     fetchRegistry: true
     service-url:
       defaultZone: http://localhost:7081/eureka/
-
