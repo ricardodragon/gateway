@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 import static com.dibros.core.token.util.SecurityContextUtil.setSecurityContext;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 public class GatewayJwtTokenAuthorizationFilter implements WebFilter {
 
