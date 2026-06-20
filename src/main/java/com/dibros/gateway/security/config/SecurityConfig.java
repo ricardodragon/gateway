@@ -1,7 +1,6 @@
 package com.dibros.gateway.security.config;
 
 import com.dibros.core.token.config.TokenConfig;
-import com.dibros.core.token.property.JwtConfiguration;
 import com.dibros.gateway.security.filter.GatewayJwtTokenAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
