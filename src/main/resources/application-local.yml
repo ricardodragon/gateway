@@ -1,10 +1,10 @@
 server:
-  port: 7080
-  ssl:
-    enabled: true
-    key-store-type: PKCS12
-    key-store: classpath:dibros.p12
-    key-store-password: 'dibros'
+  port: 8080
+#  ssl:
+#    enabled: true
+#    key-store-type: PKCS12
+#    key-store: classpath:dibros.p12
+#    key-store-password: 'dibros'
 
 spring:
   application:
@@ -19,10 +19,12 @@ spring:
       max-request-size: 3MB
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
 
 jwt:
   config:
