@@ -39,7 +39,11 @@ zuul:
 eureka:
   instance:
     prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 15
   client:
+    http-client:
+      keep-alive-timeout: 30
+      connection-idle-timeout-in-seconds: 30
     registerWithEureka: true
     fetchRegistry: true
     service-url:
