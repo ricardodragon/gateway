@@ -40,6 +40,7 @@ eureka:
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 25
   client:
     http-client:
       keep-alive-timeout: 30
