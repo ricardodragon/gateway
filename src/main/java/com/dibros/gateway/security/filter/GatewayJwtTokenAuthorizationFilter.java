@@ -25,17 +25,20 @@ public class GatewayJwtTokenAuthorizationFilter implements WebFilter {
         authorization=authorization==null?request.getRequest().getQueryParams().getFirst(AUTHORIZATION):authorization;
         String prefix = new JwtConfiguration().getHeader().getPrefix();
         if (authorization == null || !authorization.startsWith(prefix))
-            throw new WebClientResponseException(401, "unauthorized", request.getRequest().getHeaders(), new byte[]{}, StandardCharsets.UTF_8);
+            return chain.filter(request);
 
-        SignedJWT signedJWT = new TokenConverter().decryptToken(authorization.replace(prefix, "").trim());
-
-        return chain.filter(
-            request.mutate().request(
-                request.getRequest().mutate().header(
-                    AUTHORIZATION,
-                    String.format("Bearer %s", signedJWT.serialize())
+        try {
+            SignedJWT signedJWT = new TokenConverter().decryptToken(authorization.replace(prefix, "").trim());
+            return chain.filter(
+                request.mutate().request(
+                    request.getRequest().mutate().header(
+                            AUTHORIZATION,
+                            String.format("Bearer %s", signedJWT.serialize())
+                    ).build()
                 ).build()
-            ).build()
-        ).contextWrite(setSecurityContext(signedJWT));
+            ).contextWrite(setSecurityContext(signedJWT));
+        }catch(Exception e){
+            return chain.filter(request);
+        }
     }
 }
