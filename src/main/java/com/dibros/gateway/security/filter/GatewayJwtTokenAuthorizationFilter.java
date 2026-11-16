@@ -2,43 +2,46 @@ package com.dibros.gateway.security.filter;
 
 import com.dibros.core.token.converter.TokenConverter;
 import com.dibros.core.token.property.JwtConfiguration;
+import com.dibros.core.token.util.SecurityContextUtil;
 import com.nimbusds.jwt.SignedJWT;
-import jakarta.annotation.Nonnull;
-import org.springframework.lang.NonNull;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-
-import static com.dibros.core.token.util.SecurityContextUtil.setSecurityContext;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+@Component
+@RequiredArgsConstructor
 public class GatewayJwtTokenAuthorizationFilter implements WebFilter {
 
-    @Nonnull
-    @Override
-    public Mono<Void> filter(@NonNull ServerWebExchange request, @NonNull WebFilterChain chain){
-        String authorization = request.getRequest().getHeaders().getFirst(AUTHORIZATION);
-        authorization=authorization==null?request.getRequest().getQueryParams().getFirst(AUTHORIZATION):authorization;
-        String prefix = new JwtConfiguration().getHeader().getPrefix();
-        if (authorization == null || !authorization.startsWith(prefix))
-            return chain.filter(request);
+    private final JwtConfiguration jwtConfiguration;
+    private final TokenConverter tokenConverter;
 
-        try {
-            SignedJWT signedJWT = new TokenConverter().decryptToken(authorization.replace(prefix, "").trim());
-            return chain.filter(
-                request.mutate().request(
-                    request.getRequest().mutate().header(
-                            AUTHORIZATION,
-                            String.format("Bearer %s", signedJWT.serialize())
-                    ).build()
-                ).build()
-            ).contextWrite(setSecurityContext(signedJWT));
-        }catch(Exception e){
-            return chain.filter(request);
-        }
+    @Override
+    @NonNull
+    public Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
+        String prefix = this.jwtConfiguration.getHeader().getPrefix();
+
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(AUTHORIZATION))
+                .switchIfEmpty(Mono.justOrEmpty(exchange.getRequest().getQueryParams().getFirst(AUTHORIZATION)))
+                .filter(auth -> auth.startsWith(prefix))
+                .map(auth -> auth.substring(prefix.length()).trim())
+                .flatMap(token -> Mono.fromCallable(() -> this.tokenConverter.decryptToken(token)))
+                .flatMap(signedJWT -> chain.filter(this.withSignedHeader(exchange, prefix, signedJWT))
+                        .contextWrite(SecurityContextUtil.setSecurityContext(signedJWT))
+                )
+                .onErrorResume(e -> chain.filter(exchange))
+                .switchIfEmpty(Mono.defer(() -> chain.filter(exchange)));
     }
+
+    private ServerWebExchange withSignedHeader(ServerWebExchange exchange, String prefix, SignedJWT signedJWT) {
+        return exchange.mutate()
+                .request(r -> r.headers(h -> h.set(AUTHORIZATION, prefix + signedJWT.serialize())))
+                .build();
+    }
+
 }

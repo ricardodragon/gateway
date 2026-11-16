@@ -30,6 +30,7 @@ jwt:
   config:
     login-url: /auth/login
     type: "signed"
+    private-key: ${JWT_SECRET}
 
 zuul:
   host:
