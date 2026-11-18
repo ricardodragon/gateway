@@ -20,11 +20,15 @@ spring:
   cloud:
     gateway:
       server:
-        webflux:
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
+        server:
+          webflux:
+            default-filters:
+              - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Vary, RETAIN_FIRST
+              - RemoveResponseHeader=Transfer-Encoding
+            discovery:
+              locator:
+                enabled: true
+                lower-case-service-id: true
 
 jwt:
   config:

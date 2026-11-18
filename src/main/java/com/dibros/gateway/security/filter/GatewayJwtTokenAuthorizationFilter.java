@@ -30,7 +30,7 @@ public class GatewayJwtTokenAuthorizationFilter implements WebFilter {
                 .switchIfEmpty(Mono.justOrEmpty(exchange.getRequest().getQueryParams().getFirst(AUTHORIZATION)))
                 .filter(auth -> auth.startsWith(prefix))
                 .map(auth -> auth.substring(prefix.length()).trim())
-                .flatMap(token -> Mono.fromCallable(() -> this.tokenConverter.decryptToken(token)))
+                .flatMap(token -> Mono.fromCallable(() -> this.tokenConverter.decryptToken(token)).onErrorResume(e -> Mono.empty()))
                 .flatMap(signedJWT -> chain.filter(this.withSignedHeader(exchange, prefix, signedJWT))
                         .contextWrite(SecurityContextUtil.setSecurityContext(signedJWT))
                 )
