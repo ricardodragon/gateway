@@ -36,11 +36,6 @@ jwt:
     type: "signed"
     private-key: ${JWT_SECRET}
 
-zuul:
-  host:
-    socket-timeout-millis: 300000
-    connect-timeout-millis: 100000
-
 eureka:
   instance:
     prefer-ip-address: true
