@@ -20,15 +20,35 @@ spring:
   cloud:
     gateway:
       server:
-        server:
-          webflux:
-            default-filters:
-              - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Vary, RETAIN_FIRST
-              - RemoveResponseHeader=Transfer-Encoding
-            discovery:
-              locator:
-                enabled: true
-                lower-case-service-id: true
+        webflux:
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowedOriginPatterns:
+                  - "https://dibros.com.br"
+                  - "https://*.dibros.com.br"
+                  - "http://localhost"
+                  - "http://localhost:*"
+                  - "http://127.0.0.1"
+                  - "http://127.0.0.1:*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - Authorization
+                  - Content-Type
+                  - Accept
+                exposedHeaders:
+                  - Authorization
+                allowCredentials: true
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
 
 jwt:
   config:

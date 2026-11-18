@@ -27,15 +27,16 @@ public class GatewayJwtTokenAuthorizationFilter implements WebFilter {
         String prefix = this.jwtConfiguration.getHeader().getPrefix();
 
         return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(AUTHORIZATION))
-                .switchIfEmpty(Mono.justOrEmpty(exchange.getRequest().getQueryParams().getFirst(AUTHORIZATION)))
-                .filter(auth -> auth.startsWith(prefix))
-                .map(auth -> auth.substring(prefix.length()).trim())
-                .flatMap(token -> Mono.fromCallable(() -> this.tokenConverter.decryptToken(token)).onErrorResume(e -> Mono.empty()))
-                .flatMap(signedJWT -> chain.filter(this.withSignedHeader(exchange, prefix, signedJWT))
-                        .contextWrite(SecurityContextUtil.setSecurityContext(signedJWT))
-                )
-                .onErrorResume(e -> chain.filter(exchange))
-                .switchIfEmpty(Mono.defer(() -> chain.filter(exchange)));
+            .switchIfEmpty(Mono.justOrEmpty(exchange.getRequest().getQueryParams().getFirst(AUTHORIZATION)))
+            .filter(auth -> auth.startsWith(prefix))
+            .map(auth -> auth.substring(prefix.length()).trim())
+            .flatMap(token -> Mono.fromCallable(() -> this.tokenConverter.parseAndValidate(token))
+                    .onErrorResume(e -> Mono.empty())
+            )
+            .flatMap(signedJWT -> chain.filter(this.withSignedHeader(exchange, prefix, signedJWT))
+                    .contextWrite(SecurityContextUtil.setSecurityContext(signedJWT))
+            )
+            .switchIfEmpty(Mono.defer(() -> chain.filter(exchange)));
     }
 
     private ServerWebExchange withSignedHeader(ServerWebExchange exchange, String prefix, SignedJWT signedJWT) {

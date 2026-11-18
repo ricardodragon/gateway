@@ -30,29 +30,6 @@ public class SecurityConfig extends TokenConfig {
         http.addFilterAt(this.gatewayJwtTokenAuthorizationFilter, SecurityWebFiltersOrder.AUTHORIZATION);
         return super.configure(http);
     }
-
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    @Bean
-    public CorsWebFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of(
-            "https://dibros.com.br",
-            "https://*.dibros.com.br",
-            "http://localhost",
-            "http://localhost:*",
-            "http://127.0.0.1",
-            "http://127.0.0.1:*"
-        ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        config.setExposedHeaders(List.of("Authorization"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return new CorsWebFilter(source);
-    }
-
 }
 
 
