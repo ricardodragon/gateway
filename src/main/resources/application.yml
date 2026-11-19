@@ -1,18 +1,9 @@
 server:
   port: 8080
-#  ssl:
-#    enabled: true
-#    key-store-type: PKCS12
-#    key-store: classpath:dibros.p12
-#    key-store-password: 'dibros'
 
 spring:
   application:
     name: gateway
-  r2dbc:
-    url: r2dbc:mysql://127.0.0.1:3306/dibros?allowPublicKeyRetrieval=true&sslMode=DISABLED&useTimezone=true&serverTimezone=UTC
-    username: root
-    password: root
   servlet:
     multipart:
       max-file-size: 3MB
@@ -68,4 +59,4 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     service-url:
-      defaultZone: http://localhost:7081/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:7081/eureka/}
